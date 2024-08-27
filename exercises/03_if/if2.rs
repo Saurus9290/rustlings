@@ -1,11 +1,15 @@
 // TODO: Fix the compiler error on this function.
+#[allow(dead_code)]
 fn foo_if_fizz(fizzish: &str) -> &str {
     if fizzish == "fizz" {
         "foo"
+    } else if fizzish == "fuzz" {
+        "bar"
     } else {
-        1
+        "baz"
     }
 }
+
 
 fn main() {
     // You can optionally experiment here.
