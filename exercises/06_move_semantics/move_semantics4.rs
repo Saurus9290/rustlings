@@ -9,10 +9,15 @@ mod tests {
     #[test]
     fn move_semantics4() {
         let mut x = Vec::new();
+        
+        // Create a mutable reference `y` and push 42 to it.
         let y = &mut x;
-        let z = &mut x;
         y.push(42);
+        
+        // Now, create a new mutable reference `z` and push 13 to it.
+        let z = &mut x;
         z.push(13);
+
         assert_eq!(x, [42, 13]);
     }
 }
