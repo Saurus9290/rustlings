@@ -1,11 +1,8 @@
-// You can bring module paths into scopes and provide new names for them with
-// the `use` and `as` keywords.
-
 #[allow(dead_code)]
 mod delicious_snacks {
-    // TODO: Add the following two `use` statements after fixing them.
-    // use self::fruits::PEAR as ???;
-    // use self::veggies::CUCUMBER as ???;
+    // Make the imports public so they can be accessed from outside the module.
+    pub use self::fruits::PEAR as fruit;      // Renaming PEAR to fruit and making it public
+    pub use self::veggies::CUCUMBER as veggie; // Renaming CUCUMBER to veggie and making it public
 
     mod fruits {
         pub const PEAR: &str = "Pear";
@@ -21,7 +18,7 @@ mod delicious_snacks {
 fn main() {
     println!(
         "favorite snacks: {} and {}",
-        delicious_snacks::fruit,
-        delicious_snacks::veggie,
+        delicious_snacks::fruit,   // Accessing `fruit` which is `PEAR`
+        delicious_snacks::veggie,  // Accessing `veggie` which is `CUCUMBER`
     );
 }
