@@ -4,6 +4,11 @@
 // `hour_of_day` is higher than 23.
 fn maybe_icecream(hour_of_day: u16) -> Option<u16> {
     // TODO: Complete the function body.
+    match hour_of_day {
+    0..=21 => Some(5),
+    22..=23 => Some(0),
+    _=> None,
+}
 }
 
 fn main() {
