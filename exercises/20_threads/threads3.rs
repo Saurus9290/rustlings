@@ -1,4 +1,4 @@
-use std::{sync::mpsc, thread, time::Duration};
+use std::{sync::{mpsc, Arc, Mutex}, thread, time::Duration};
 
 struct Queue {
     length: u32,
@@ -16,28 +16,31 @@ impl Queue {
     }
 }
 
-fn send_tx(q: Queue, tx: mpsc::Sender<u32>) {
-    // TODO: We want to send `tx` to both threads. But currently, it is moved
-    // into the first thread. How could you solve this problem?
+fn send_tx(q: Queue, tx: Arc<Mutex<mpsc::Sender<u32>>>) {
+    let tx1 = Arc::clone(&tx);
+    let tx2 = Arc::clone(&tx);
+
+    // Thread to send the first half of the queue
     thread::spawn(move || {
         for val in q.first_half {
             println!("Sending {val:?}");
-            tx.send(val).unwrap();
+            tx1.lock().unwrap().send(val).unwrap();
             thread::sleep(Duration::from_millis(250));
         }
     });
 
+    // Thread to send the second half of the queue
     thread::spawn(move || {
         for val in q.second_half {
             println!("Sending {val:?}");
-            tx.send(val).unwrap();
+            tx2.lock().unwrap().send(val).unwrap();
             thread::sleep(Duration::from_millis(250));
         }
     });
 }
 
 fn main() {
-    // You can optionally experiment here.
+    // You can experiment with the code here if desired.
 }
 
 #[cfg(test)]
@@ -50,7 +53,8 @@ mod tests {
         let queue = Queue::new();
         let queue_length = queue.length;
 
-        send_tx(queue, tx);
+        let tx = Arc::new(Mutex::new(tx));
+        send_tx(queue, Arc::clone(&tx));
 
         let mut total_received: u32 = 0;
         for received in rx {
