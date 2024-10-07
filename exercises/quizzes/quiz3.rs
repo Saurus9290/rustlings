@@ -1,25 +1,14 @@
-// This quiz tests:
-// - Generics
-// - Traits
-//
-// An imaginary magical school has a new report card generation system written
-// in Rust! Currently, the system only supports creating report cards where the
-// student's grade is represented numerically (e.g. 1.0 -> 5.5). However, the
-// school also issues alphabetical grades (A+ -> F-) and needs to be able to
-// print both types of report card!
-//
-// Make the necessary code changes in the struct `ReportCard` and the impl
-// block to support alphabetical report cards in addition to numerical ones.
+use std::fmt::Display;
 
-// TODO: Adjust the struct as described above.
-struct ReportCard {
-    grade: f32,
+// Make the ReportCard struct generic over the grade type `T`
+struct ReportCard<T> {
+    grade: T,
     student_name: String,
     student_age: u8,
 }
 
-// TODO: Adjust the impl block as described above.
-impl ReportCard {
+// Implement print method for ReportCard where `T` implements the Display trait
+impl<T: Display> ReportCard<T> {
     fn print(&self) -> String {
         format!(
             "{} ({}) - achieved a grade of {}",
@@ -29,7 +18,20 @@ impl ReportCard {
 }
 
 fn main() {
-    // You can optionally experiment here.
+    // Experimentation
+    let numeric_report_card = ReportCard {
+        grade: 3.7,
+        student_name: "Alice".to_string(),
+        student_age: 13,
+    };
+    println!("{}", numeric_report_card.print());
+
+    let alphabetic_report_card = ReportCard {
+        grade: "A",
+        student_name: "Bob".to_string(),
+        student_age: 14,
+    };
+    println!("{}", alphabetic_report_card.print());
 }
 
 #[cfg(test)]
